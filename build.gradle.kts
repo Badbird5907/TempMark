@@ -2,10 +2,11 @@ plugins {
     id("java")
     id("io.freefair.lombok") version "6.5.1"
     `maven-publish`
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "dev.badbird"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 description = "A markdown templating engine"
 
 
@@ -22,20 +23,25 @@ dependencies {
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
-/*
-task sourcesJar(type: Jar) {
-    classifier 'sources'
-    from sourceSets.main.allSource
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
 }
-task javadocJar(type: Jar) {
-    classifier 'javadoc'
-    from sourceSets.main.allJava
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    from(tasks["javadoc"])
+}
+tasks {
+    shadowJar {
+        archiveClassifier.set("")
+        exclude("org.checkerframework.*")
+        relocate("com.google", "dev.badbird.markdown.relocated.google")
+    }
 }
 artifacts {
-    archives javadocJar
-    archives sourcesJar
+    add("archives", sourcesJar)
+    add("archives", javadocJar)
 }
-*/
 publishing {
     repositories {
         maven {
@@ -52,7 +58,8 @@ publishing {
         }
     }
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("shadow") {
+            artifact(tasks["shadowJar"])
             pom {
                 name.set("TempMark")
                 description.set("A templating engine for markdown")
