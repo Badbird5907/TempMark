@@ -7,7 +7,6 @@ import dev.badbird.markdown.token.impl.ReplacementToken;
 import dev.badbird.markdown.util.WebCache;
 import lombok.Data;
 import lombok.SneakyThrows;
-import org.openjsse.sun.security.util.Cache;
 
 import java.io.File;
 import java.nio.file.Files;
