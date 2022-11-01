@@ -25,6 +25,9 @@ public class ImportToken extends Token {
             if (parser.getConfig().isReplaceGithubURL() && url.startsWith("https://github.com/")) {
                 url = GithubResource.fromURL(url).getEffectiveURL(true);
             }
+            if (parser.getConfig().getUrlMutator() != null) {
+                url = parser.getConfig().getUrlMutator().mutate(url);
+            }
             Import importObj = new Import(url, name);
             if (parser.IMPORT_REGISTRY.containsKey(name)) {
                 throw new ParseError("Import with name '" + name + "' already exists!");
