@@ -3,6 +3,7 @@ package dev.badbird.markdown.token.impl;
 import dev.badbird.markdown.MarkdownParser;
 import dev.badbird.markdown.object.Import;
 import dev.badbird.markdown.object.ParseError;
+import dev.badbird.markdown.object.TempMarkConfig;
 import dev.badbird.markdown.token.Token;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,14 @@ public class ReplacementToken extends Token {
         if (importObj == null) {
             throw new ParseError("Import with name '" + inside + "' does not exist!");
         }
-        return importObj.getContents(parser);
+        String s = importObj.getContents(parser);
+        if (parser.getConfig().isParseNestedTemplates()) {
+            MarkdownParser parse;
+            if (parser.getConfig().isUseNewParserForNestedTemplates()) {
+                parse = new MarkdownParser();
+            } else parse = parser;
+            s = parse.parse(s);
+        }
+        return s;
     }
 }

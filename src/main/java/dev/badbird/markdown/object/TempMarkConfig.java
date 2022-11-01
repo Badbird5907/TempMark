@@ -8,6 +8,7 @@ import lombok.Data;
 public class TempMarkConfig {
     private boolean cacheResults = true;
     private boolean parseNestedTemplates = false; // Disabled by default for security reasons
+    private boolean useNewParserForNestedTemplates = true;
     public TempMarkConfig() {
 
     }
