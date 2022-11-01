@@ -15,7 +15,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.google.guava:guava:31.1-jre") {
+        exclude(group = "org.checkerframework")
+    }
 }
 /*
 val sourcesJar by tasks.registering(Jar::class) {
