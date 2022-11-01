@@ -15,14 +15,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     implementation("com.google.guava:guava:31.1-jre")
 }
-
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
+/*
 val sourcesJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
     from(sourceSets["main"].allSource)
@@ -31,17 +26,18 @@ val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
     from(tasks["javadoc"])
 }
-tasks {
-    shadowJar {
-        archiveClassifier.set("")
-        exclude("org.checkerframework.*")
-        relocate("com.google", "dev.badbird.markdown.relocated.google")
-    }
-}
 artifacts {
     add("archives", sourcesJar)
     add("archives", javadocJar)
 }
+ */
+tasks {
+    shadowJar {
+        archiveClassifier.set("")
+        relocate("com.google", "dev.badbird.markdown.relocated.google")
+    }
+}
+
 publishing {
     repositories {
         maven {
