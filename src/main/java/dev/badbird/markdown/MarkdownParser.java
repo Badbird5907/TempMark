@@ -1,19 +1,20 @@
 package dev.badbird.markdown;
 
-import dev.badbird.markdown.object.GenericParseException;
-import dev.badbird.markdown.object.Import;
-import dev.badbird.markdown.object.ParseError;
-import dev.badbird.markdown.object.ReplaceWithNothing;
+import dev.badbird.markdown.object.*;
 import dev.badbird.markdown.token.Token;
 import dev.badbird.markdown.token.impl.ImportToken;
 import dev.badbird.markdown.token.impl.ReplacementToken;
+import dev.badbird.markdown.util.WebCache;
+import lombok.Data;
 import lombok.SneakyThrows;
+import org.openjsse.sun.security.util.Cache;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 
+@Data
 public class MarkdownParser {
     /*
     Our custom markdown looks like this:
@@ -33,10 +34,22 @@ public class MarkdownParser {
     private static final Pattern PATTERN = Pattern.compile("\\{\\{.*}}");
 
     private final Token[] TOKENS = {
-            new ImportToken(), new ReplacementToken()
+            new ImportToken(), new ReplacementToken(this)
     };
 
     public static final List<String> RESERVED_WORDS = Arrays.asList("import", "as");
+
+    private TempMarkConfig config;
+
+    private WebCache cache;
+
+    public MarkdownParser(TempMarkConfig config) {
+        this.config = config;
+        this.cache = new WebCache(this);
+    }
+    public MarkdownParser() {
+        this(new TempMarkConfig());
+    }
 
     public String parse(String in) {
         String[] lines = in.split("\n");
@@ -45,7 +58,7 @@ public class MarkdownParser {
             String line = lines[i];
             // Use newLines
             if (PATTERN.matcher(line).find()) {
-                System.err.println("Line matches! " + line);
+                //System.err.println("Line matches! " + line);
                 String inside = line.substring(2, line.length() - 3);
                 if (inside.startsWith("\\")) {
                     newLines.add(line.substring(1));
@@ -70,7 +83,7 @@ public class MarkdownParser {
                     }
                 }
             } else {
-                System.err.println("Line doesn't match! " + line);
+                //System.err.println("Line doesn't match! " + line);
                 newLines.add(line);
             }
         }

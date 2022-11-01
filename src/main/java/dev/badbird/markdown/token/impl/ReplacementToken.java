@@ -4,8 +4,11 @@ import dev.badbird.markdown.MarkdownParser;
 import dev.badbird.markdown.object.Import;
 import dev.badbird.markdown.object.ParseError;
 import dev.badbird.markdown.token.Token;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ReplacementToken extends Token {
+    private final MarkdownParser parser;
     @Override
     public String getReplacement(String line, String inside, MarkdownParser parser) throws ParseError {
         if (MarkdownParser.RESERVED_WORDS.contains(inside)) {
@@ -15,6 +18,6 @@ public class ReplacementToken extends Token {
         if (importObj == null) {
             throw new ParseError("Import with name '" + inside + "' does not exist!");
         }
-        return importObj.getContents();
+        return importObj.getContents(parser);
     }
 }
