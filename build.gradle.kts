@@ -19,10 +19,24 @@ dependencies {
         exclude(group = "org.checkerframework")
     }
 }
+/*
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
+}
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    from(tasks["javadoc"])
+}
+artifacts {
+    add("archives", sourcesJar)
+    add("archives", javadocJar)
+}
+ */
 tasks {
     shadowJar {
         archiveClassifier.set("")
-        //relocate("com.google", "dev.badbird.markdown.relocated.google")
+        relocate("com.google", "dev.badbird.markdown.relocated.google")
     }
 }
 
