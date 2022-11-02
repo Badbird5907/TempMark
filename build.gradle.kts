@@ -36,7 +36,7 @@ artifacts {
 tasks {
     shadowJar {
         archiveClassifier.set("")
-        relocate("com.google", "dev.badbird.markdown.relocated.google")
+        //relocate("com.google", "dev.badbird.markdown.relocated.google")
     }
 }
 
