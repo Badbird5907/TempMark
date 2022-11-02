@@ -6,6 +6,8 @@ import dev.badbird.markdown.object.Import;
 import dev.badbird.markdown.object.ParseError;
 import dev.badbird.markdown.object.ReplaceWithNothing;
 import dev.badbird.markdown.token.Token;
+import dev.badbird.markdown.util.GithubResource;
+import dev.badbird.markdown.util.WebUtil;
 
 public class ImportToken extends Token {
     @Override
@@ -19,6 +21,12 @@ public class ImportToken extends Token {
             }
             if (MarkdownParser.RESERVED_WORDS.contains(name)) {
                 throw new ParseError("'" + name + "' is a reserved keyword!");
+            }
+            if (parser.getConfig().isReplaceGithubURL() && url.startsWith("https://github.com/")) {
+                url = GithubResource.fromURL(url).getEffectiveURL(true);
+            }
+            if (parser.getConfig().getUrlMutator() != null) {
+                url = parser.getConfig().getUrlMutator().mutate(url);
             }
             Import importObj = new Import(url, name);
             if (parser.IMPORT_REGISTRY.containsKey(name)) {

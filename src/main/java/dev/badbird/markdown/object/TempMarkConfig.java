@@ -7,47 +7,38 @@ public class TempMarkConfig {
     private boolean cacheResults = true;
     private boolean parseNestedTemplates = false; // Disabled by default for security reasons
     private boolean useNewParserForNestedTemplates = true;
+    private boolean replaceGithubURL = true; // replace github.com with raw.githubusercontent.com
+    private Callback urlMutator = null;
     public TempMarkConfig() {
-
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public TempMarkConfig setCacheResults(boolean cacheResults) {
+        this.cacheResults = cacheResults;
+        return this;
     }
 
-    public static class Builder {
-        private boolean cacheResults;
-        private boolean parseNestedTemplates;
-        private boolean useNewParserForNestedTemplates;
-
-        Builder() {
-        }
-
-        public Builder cacheResults(boolean cacheResults) {
-            this.cacheResults = cacheResults;
-            return this;
-        }
-
-        public Builder parseNestedTemplates(boolean parseNestedTemplates) {
-            this.parseNestedTemplates = parseNestedTemplates;
-            return this;
-        }
-
-        public Builder useNewParserForNestedTemplates(boolean useNewParserForNestedTemplates) {
-            this.useNewParserForNestedTemplates = useNewParserForNestedTemplates;
-            return this;
-        }
-
-        public TempMarkConfig build() {
-            TempMarkConfig tempMarkConfig = new TempMarkConfig();
-            tempMarkConfig.setCacheResults(cacheResults);
-            tempMarkConfig.setParseNestedTemplates(parseNestedTemplates);
-            tempMarkConfig.setUseNewParserForNestedTemplates(useNewParserForNestedTemplates);
-            return tempMarkConfig;
-        }
-
-        public String toString() {
-            return "TempMarkConfig.TempMarkConfigBuilder(cacheResults=" + this.cacheResults + ", parseNestedTemplates=" + this.parseNestedTemplates + ", useNewParserForNestedTemplates=" + this.useNewParserForNestedTemplates + ")";
-        }
+    public TempMarkConfig setParseNestedTemplates(boolean parseNestedTemplates) {
+        this.parseNestedTemplates = parseNestedTemplates;
+        return this;
     }
+
+    public TempMarkConfig setUseNewParserForNestedTemplates(boolean useNewParserForNestedTemplates) {
+        this.useNewParserForNestedTemplates = useNewParserForNestedTemplates;
+        return this;
+    }
+
+    public TempMarkConfig setReplaceGithubURL(boolean replaceGithubURL) {
+        this.replaceGithubURL = replaceGithubURL;
+        return this;
+    }
+
+    public TempMarkConfig setUrlMutator(Callback urlMutator) {
+        this.urlMutator = urlMutator;
+        return this;
+    }
+
+    public static interface Callback {
+        String mutate(String url);
+    }
+
 }
